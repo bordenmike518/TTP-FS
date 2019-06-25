@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Register</title>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="../css/style.css">
+<script type="text/javascript" src="../javascript/functions.js"></script>
+</head>
+<body>
+    <header></header>
+    <nav>
+        <a href="login.html">Sign In</a>
+    </nav>
+    <main>
+        <div class="loginbox" style="height: 400px;">
+            <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 200px);">
+            <h1>Register</h1>
+            <form>
+                <input type="text" name="fname" placeholder="First name">
+                <input type="text" name="lname" placeholder="Last name">
+                <input type="text" name="email" placeholder="E-mail">
+                <input type="password" class="showPassword" name="password" placeholder="Password">
+                <input type="password" class="showPassword" name="repassword" placeholder="Retype password">
+                <label for="showId">
+                    <input type="checkbox" id="showId" onclick="showPassword();">
+                    Show passwords
+                </label>
+                <input type="submit" name="" placeholder="Login"><br>
+                <a href="login.html">Already have an account?</a><br><br>
+            </form>
+        </div>
+    </main>
+    <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
+    <script>
+        function showPassword() {
+            var x = document.getElementsByClassName("showPassword");
+            for(var i = 0; i < 2; i++) {
+                if (x[i].type === "password") {
+                    x[i].type = "text";
+                } else {
+                    x[i].type = "password";
+                }
+            }
+        }
+        function checkPasswordMatch() {
+            pwd1 = document.getElementByName("password");
+            pwd2 = document.getElementByName("repassword");
+            if (pwd1 !== pwd2) {
+                console.log("Does not match!");
+            }
+            else {
+                console.log("Does match!");
+            }
+        }
+    </script>
+</body>
+</html>
