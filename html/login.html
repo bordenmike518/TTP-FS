@@ -3,21 +3,21 @@
 <head>
 <title>Sign In</title>
 <meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="../css/style.css">
-<script type="text/javascript" src="../javascript/functions.js"></script>
+<link rel="icon" href="../images/favicon.png">
+<link rel="stylesheet" type="text/css" href="../css/main_style.css">
+<link rel="stylesheet" type="text/css" href="../css/login_style.css">
+<script type="text/javascript" src="../javascript/login_functions.js"></script>
 </head>
 <body>
     <header></header>
-    <nav>
-        <a href="register.html">Register</a>
-    </nav>
+    <nav></nav>
     <main>
         <div class="loginbox" style="height: 280px;">
             <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 145px);">
             <h1>Sign In</h1>
             <form>
                 <input type="text" name="" placeholder="E-mail">
-                <input type="password" id="psd" name="" placeholder="Password">
+                <input type="password" class="showPassword" name="" placeholder="Password">
                 <label for="showId" >
                     <input type="checkbox" id="showId" onclick="showPassword()">
                     Show password
@@ -29,15 +29,5 @@
         </div>
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
-    <script>
-        function showPassword() {
-            var x = document.getElementById("psd");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
-            }
-        }
-    </script>
 </body>
 </html>

@@ -3,14 +3,27 @@
 <head>
 <title>Portfolio</title>
 <meta charset="utf-8">
+<link rel="icon" href="../images/avatar.png">
+<link rel="stylesheet" type="text/css" href="../css/main_style.css">
+<link rel="stylesheet" type="text/css" href="../css/portfolio_style.css">
 </head>
 <body>
-<header></header>
-<nav>
-    <a href="portfolio.html">Portfolio</a> | 
-    <a href="transactions.html">Transactions</a>
-</nav>
-<main></main>
-<footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
+    <header></header>
+    <nav>
+        <div id="mainStock">Portfolio $</div><div id="mainValue"></div>
+        <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
+        <div class="hamburgerMenu">
+            <div class="hamburgerLink"><div id="link">Portfolio</div></div>
+            <div class="hamburgerLink"><div id="link">Transactions</div></div>
+            <div class="hamburgerLink"><div id="link">Settings</div></div>
+        </div>
+        <!--a href="portfolio.html">Portfolio</a> | 
+        <a href="transactions.html">Transactions</a-->
+    </nav>
+    <main>
+        
+    </main>
+    <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>
+<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </html>

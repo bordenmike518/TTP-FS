@@ -1,0 +1,26 @@
+/* Inside-out listing. */
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #C1FEDD;
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    right: 0;
+    left: 0;
+}
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
