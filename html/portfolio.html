@@ -6,15 +6,14 @@
 <link rel="icon" href="../images/favicon.ico">
 <link rel="stylesheet" type="text/css" href="../css/portfolio_style.css">
 <link rel="stylesheet" type="text/css" href="../css/main_style.css">
-<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </head>
 <body>
-    <header></header>
-    <nav>
-        <div id="mainStock">Portfolio $</div><div id="mainValue"></div>
+    <header>
+        <div id="navPortfolioLabel">Portfolio $</div><div id="navPortfolioValue"></div>
+        <div id="dimmer"></div>
         <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
-        <div class="hamburgerMenu">
-            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
+        <div id="hamburgerMenu">
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./portfolio.html');">
                 <div id="childLink">Portfolio</div></div>
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./transactions.html');">
                 <div id="childLink">Transactions</div></div>
@@ -22,12 +21,12 @@
                 <div id="childLink">Settings</div></div>
             <canvas id="canvas"></canvas>
         </div>
-        <!--a href="portfolio.html">Portfolio</a> | 
-        <a href="transactions.html">Transactions</a-->
-    </nav>
+    </header>
+    <nav></nav>
     <main>
         
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>
+<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </html>

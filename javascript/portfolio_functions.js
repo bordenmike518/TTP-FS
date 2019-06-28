@@ -1,7 +1,11 @@
 function popoutMenu() {
-    var menu = document.getElementsByClassName("hamburgerMenu")[0];
+    var menu = document.getElementById("hamburgerMenu");
     var links = document.getElementsByClassName("hamburgerLink");
+    var dimmer = document.getElementById("dimmer");
     if (menu.style.width == "200px") {
+        dimmer.setAttribute("style",
+            "visibility: hidden; \
+             width: 0px;");
         menu.setAttribute("style",
             "visibility: hidden; \
              width: 0px;");
@@ -9,6 +13,9 @@ function popoutMenu() {
             links[j].setAttribute("style", "width: 0px; visibility: hidden;");
     }
     else {
+        dimmer.setAttribute("style",
+            "visibility: visible; \
+             width: 100%;");
         for (var j = 0; j <= links.length-1; j++)
             links[j].setAttribute("style", "width:168px; visibility:visible;");
         menu.setAttribute("style",
@@ -18,7 +25,7 @@ function popoutMenu() {
 }
 
 function mouseOverLink(element) {
-    let elem = element.children[0];
+    let elem = element.children["childLink"];
     var text = elem.textContent;
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext('2d');
@@ -28,7 +35,7 @@ function mouseOverLink(element) {
 }
 
 function mouseOutLink(element) {
-    elem = element.children[0];
+    elem = element.children["childLink"];
     elem.style.width = "168px";
 }
 

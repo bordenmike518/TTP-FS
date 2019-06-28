@@ -8,22 +8,22 @@
 <link rel="stylesheet" type="text/css" href="../css/portfolio_style.css">
 </head>
 <body>
-    <header></header>
-    <nav>
-        <div id="mainStock">Transactions</div><div id="mainValue"></div>
+    <header>
+        <div id="headerBox"></div>
+        <div id="navPortfolioLabel">Transactions</div>
+        <div id="dimmer"></div>
         <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
-        <div class="hamburgerMenu">
+        <div id="hamburgerMenu">
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./portfolio.html');">
                 <div id="childLink">Portfolio</div></div>
-            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./transactions.html');">
                 <div id="childLink">Transactions</div></div>
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
                 <div id="childLink">Settings</div></div>
             <canvas id="canvas"></canvas>
         </div>
-        <!--a href="portfolio.html">Portfolio</a> | 
-        <a href="transactions.html">Transactions</a-->
-    </nav>
+    </header>
+    <nav></nav>
     <main>
         
     </main>
