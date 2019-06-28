@@ -1,6 +1,8 @@
 /* Inside-out listing. */
 html {
     height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body {
@@ -18,9 +20,29 @@ footer {
     left: 0;
 }
 
+div {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
 .avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
 }
 
+@media only all and (max-width: 1024px) {
+    
+}
+
+@media only all and (max-width: 768px) {
+    
+}

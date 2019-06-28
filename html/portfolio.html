@@ -3,9 +3,10 @@
 <head>
 <title>Portfolio</title>
 <meta charset="utf-8">
-<link rel="icon" href="../images/avatar.png">
-<link rel="stylesheet" type="text/css" href="../css/main_style.css">
+<link rel="icon" href="../images/favicon.ico">
 <link rel="stylesheet" type="text/css" href="../css/portfolio_style.css">
+<link rel="stylesheet" type="text/css" href="../css/main_style.css">
+<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </head>
 <body>
     <header></header>
@@ -13,9 +14,13 @@
         <div id="mainStock">Portfolio $</div><div id="mainValue"></div>
         <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
         <div class="hamburgerMenu">
-            <div class="hamburgerLink"><div id="link">Portfolio</div></div>
-            <div class="hamburgerLink"><div id="link">Transactions</div></div>
-            <div class="hamburgerLink"><div id="link">Settings</div></div>
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
+                <div id="childLink">Portfolio</div></div>
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./transactions.html');">
+                <div id="childLink">Transactions</div></div>
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
+                <div id="childLink">Settings</div></div>
+            <canvas id="canvas"></canvas>
         </div>
         <!--a href="portfolio.html">Portfolio</a> | 
         <a href="transactions.html">Transactions</a-->
@@ -25,5 +30,4 @@
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>
-<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </html>
