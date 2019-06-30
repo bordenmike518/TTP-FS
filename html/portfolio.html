@@ -4,29 +4,32 @@
 <title>Portfolio</title>
 <meta charset="utf-8">
 <link rel="icon" href="../images/favicon.ico">
-<link rel="stylesheet" type="text/css" href="../css/portfolio_style.css">
-<link rel="stylesheet" type="text/css" href="../css/main_style.css">
+<link rel="stylesheet" type="text/css" href="../css/portfolio.css">
+<link rel="stylesheet" type="text/css" href="../css/main.css">
+<script type="text/javascript" src="../javascript/portfolio.js"></script>
 </head>
-<body>
+<body onLoad="listPortfolio();">
     <header>
+        <div id="headerBox"></div>
         <div id="navPortfolioLabel">Portfolio $</div><div id="navPortfolioValue"></div>
-        <div id="dimmer"></div>
-        <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
+        <div id="dimmer" onclick="popoutMenu();"></div>
         <div id="hamburgerMenu">
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./portfolio.html');">
                 <div id="childLink">Portfolio</div></div>
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./transactions.html');">
                 <div id="childLink">Transactions</div></div>
-            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick=";">
-                <div id="childLink">Settings</div></div>
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('./login.html');">
+                <div id="childLink">Sign Out</div></div> <!-- Temp function. Will be changed when backend is built -->
             <canvas id="canvas"></canvas>
         </div>
+        <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
     </header>
     <nav></nav>
+    <br><br>
+    <br><br>
     <main>
-        
+        <!-- Dynamic Section -->
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>
-<script type="text/javascript" src="../javascript/portfolio_functions.js"></script>
 </html>

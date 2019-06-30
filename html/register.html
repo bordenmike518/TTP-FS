@@ -4,9 +4,9 @@
 <title>Register</title>
 <meta charset="utf-8">
 <link rel="icon" href="../images/favicon.ico">
-<link rel="stylesheet" type="text/css" href="../css/main_style.css">
-<link rel="stylesheet" type="text/css" href="../css/login_style.css">
-<script type="text/javascript" src="../javascript/login_functions.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/login.css">
+<script type="text/javascript" src="../javascript/login.js"></script>
 </head>
 <body>
     <header></header>
@@ -15,17 +15,18 @@
         <div class="loginbox" style="height: 400px;">
             <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 200px);">
             <h1>Register</h1>
-            <form>
-                <input type="text" name="fname" placeholder="First name">
-                <input type="text" name="lname" placeholder="Last name">
-                <input type="text" name="email" placeholder="E-mail">
-                <input type="password" class="showPassword" name="password" placeholder="Password">
-                <input type="password" class="showPassword" name="repassword" placeholder="Retype password">
+            <form id="registerForm" autocomplete="on" name="registerForm" action="../php/register.php" method="POST">
+                <input type="text" name="fname" placeholder="First name" maxlength="64" required>
+                <input type="text" name="lname" placeholder="Last name" maxlength="64" required>
+                <input type="email" name="email" placeholder="E-mail" maxlength="64" required>
+                <input type="password" class="showPassword" name="password" placeholder="Password" value="" maxlength="64" required>
+                <input type="password" class="showPassword" name="repassword" placeholder="Confirm password" value="" maxlength="64" required>
                 <label for="showId">
-                    <input type="checkbox" id="showId" onclick="showPassword();">
-                    Show passwords
+                    <input type="checkbox" id="showId" onclick="showPassword();">Show passwords
                 </label>
-                <input type="submit" name="" placeholder="Login" onclick="checkPasswordMatch();"><br>
+                <input type="button" value="Login" onclick="validateConfirmedPassword();">
+                <input type="submit" id="registerSubmit">
+                <br><br>
                 <a href="login.html">Already have an account?</a><br><br>
             </form>
         </div>

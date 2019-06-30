@@ -1,0 +1,5 @@
+All the front-end pages are far enough to start working on the back-end. A 'database_schema.txt' has been started to design the database for each page. Also, need to figure out more on what I need to build the back-end. 
+
+Next step is to design and implement a PostgreSQL schema and sample queries, and implement some to show functionality and a proper connection.
+
+All is looking to be going well, for now....
