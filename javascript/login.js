@@ -50,3 +50,8 @@ function uncheck () {
     var checkbox = document.getElementById('showId');
     checkbox.checked = false;
 }
+
+function check() {
+    $check = document.getElementById('check');
+    $check.click();
+}

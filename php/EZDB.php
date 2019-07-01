@@ -12,8 +12,7 @@
         private $user   = "";
         private $pass   = "";
         private $dbname = "";
-        private $id     = "";
-        private $registerQuery  = "insert into users (fname, lname, email, password, timstamp) values ($1, $2, $3, $4, now());";
+        private $registerQuery  = "insert into users (fname, lname, email, password, timstamp) values ($1, $2, $3, $4, now()); select userid from users where email = $3;";
         private $loginQuery     = "select userId, password from users where email = $1;";
         private $logSheetQuery  = "insert into logSheet (userId, type, timstamp) values ($1, $2, now());";
         private $conn;
@@ -35,10 +34,12 @@
                 $hash  = password_hash($password, PASSWORD_DEFAULT);
                 $result = pg_prepare($this->conn, "register", $this->registerQuery);
                 $result = pg_execute($this->conn, "register", array("$fname", "$lname", "$email", "$hash"));
+                $id = pg_fetch_result($result, 0, 0);
                 if ($result) {
-                    $this->id = $id;
+                    $_SESSION['id'] = $id;
                     $result = pg_prepare($this->conn, "logSheet", $this->logSheetQuery);
-                    $result = pg_execute($this->conn, "logSheet", array("$this->id", "I"));
+                    $result = pg_execute($this->conn, "logSheet", array("$id", "I"));
+                    $this->close();
                     return true;
                 }
                 else {
@@ -58,14 +59,15 @@
                 $id = pg_fetch_result($result, 0, 0);
                 $hash = pg_fetch_result($result, 0, 1);
                 if (password_verify($password, $hash)) {
-                    $this->id = $id;
+                    $_SESSION['id'] = $id;
                     $result = pg_prepare($this->conn, "logSheet", $this->logSheetQuery);
-                    $result = pg_execute($this->conn, "logSheet", array("$this->id", "I"));
-                    return $result;
+                    $result = pg_execute($this->conn, "logSheet", array("$id", "I"));
+                    $this->close();
+                    return true;
                 }
                 else {
                     $this->close();
-                    return $result;
+                    return false;
                 }
             } catch (Exception $e) {
                 $this->close();
@@ -74,10 +76,13 @@
         }
         
         public function logout () {
+                $id = $_SESSION['id'];
                 $result = pg_prepare($this->conn, "logSheet", $this->logSheetQuery);
-                $result = pg_execute($this->conn, "logSheet", array("$this->id", "O"));
+                $result = pg_execute($this->conn, "logSheet", array("$id", "O"));
                 $this->close();
-                header("Location: ../html/login.html");
+                unset($_SESSION['id']);
+                header("Location: login.php");
+                exit();
         }
 
         private function close () {

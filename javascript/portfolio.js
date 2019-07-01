@@ -64,6 +64,7 @@ function listPortfolio() {
     }
 }
 
-function logout() {
-    
+function check() {
+    $check = document.getElementById('check');
+    $check.click();
 }
