@@ -1,27 +1,24 @@
 <?php
-
     include("EZDB.php");
-    ini_set('display_errors', 1);
+    ini_set('display_errors', '1');
+    if(!isset($_SESSION)) { 
+        session_start(); 
+    } 
     
     $ezdb = new EZDB('localhost', 'postgres', 'postgres', 'adm123');
-    $ezdb->{'DBConn'}();
-    $conn = $ezdb->{'conn'};
+    $ezdb->{'connect'}();
 
     if (isset($_POST['fname'])) {
-        $fname  = $_POST['fname'];
-        $lname  = $_POST['lname'];
-        $email  = $_POST['email'];
-        $passw  = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $query  = "insert into users (fname, lname, email, password, timstamp)
-                   values ($1, $2, $3, $4, now());";
-        $result = pg_prepare($conn, "register", $query);
-        $result = pg_execute($conn, "register", array("$fname", "$lname", "$email", "$passw"));
+        $fname     = $_POST['fname'];
+        $lname     = $_POST['lname'];
+        $email     = $_POST['email'];
+        $password  = $_POST['password'];
+        $result = $ezdb->{'register'}($fname, $lname, $email, $password);
         if ($result) {
-            $ezdb->DBClose();
+            $_SESSION["ezdb"] = $ezdb;
             header("Location: ../html/portfolio.html");
         }
         else {
-            $ezdb->DBClose();
             header("Location: ../html/register.html");
         }
     }

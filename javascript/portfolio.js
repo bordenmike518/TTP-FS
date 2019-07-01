@@ -63,3 +63,7 @@ function listPortfolio() {
         main.insertAdjacentHTML("afterbegin", stockBox.format((120 * (i+1)), stocks[i]));
     }
 }
+
+function logout() {
+    
+}

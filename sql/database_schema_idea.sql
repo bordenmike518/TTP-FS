@@ -9,6 +9,13 @@ create table users (
     timstamp timestamp not null
 );
 
+drop table if exists logSheet;
+create table logSheet (
+    userId int,
+    type char not null, -- 'I'n, 'O'ut
+    timstamp timestamp not null
+);
+
 
 drop table if exists transactions;
 create table transactions (

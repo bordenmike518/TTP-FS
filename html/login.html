@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="../css/login.css">
 <script type="text/javascript" src="../javascript/login.js"></script>
 </head>
-<body>
+<body onload="uncheck();">
     <header></header>
     <nav></nav>
     <main>
@@ -18,10 +18,7 @@
             <form id="loginForm" name="loginForm" autocomplete="on" action="../php/login.php" method="POST">
                 <input type="text" name="email" placeholder="E-mail" required autofocus>
                 <input type="password" class="showPassword" name="password" placeholder="Password" required>
-                <label for="showId" >
-                    <input type="checkbox" id="showId" onclick="showPassword()">
-                    Show password
-                </label>
+                <label for="showId" > <input type="checkbox" id="showId" onclick="showPassword()"> Show password </label>
                 <input type="button" value="Login" onclick="document.getElementById('registerSubmit').click();">
                 <input type="submit" id="registerSubmit">
                 <br><br>

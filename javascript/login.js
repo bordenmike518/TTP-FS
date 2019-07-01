@@ -34,13 +34,19 @@ function validateConfirmedPassword() {
     console.log(pwd1.value);
     console.log(pwd2.value);
     if (pwd1.value != pwd2.value) {
-        pwd2.placeholder = "MUST CONFIRM PASSWORD";
+        pwd2.placeholder = "Passwords don't match";
         pwd2.value = "";
         pwd2.style.borderColor = "#f00";
+        pwd2.focus();
         console.log('not match');
     }
     else {
         console.log('match');
         submit.click();
     }
+}
+
+function uncheck () {
+    var checkbox = document.getElementById('showId');
+    checkbox.checked = false;
 }
