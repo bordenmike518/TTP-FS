@@ -1,21 +1,3 @@
-/*document.addEventListener('invalid', (function(){
-    return function(e){
-        e.preventDefault();
-        e["target"].style.borderWidth = "2px";
-        e["target"].style.marginBottom = "9px";
-        e["target"].style.borderColor = "#f00";
-    };
-})(), true);
-
-document.addEventListener('valid', (function(){
-    return function(e){
-        e.preventDefault();
-        e["target"].style.borderWidth = "1px";
-        e["target"].style.marginBottom = "10px";
-        e["target"].style.borderColor = "#666";
-    };
-})(), true);*/
-
 function showPassword() {
     var x = document.getElementsByClassName("showPassword");
     for(var i = 0; i < x.length; i++) {
@@ -51,7 +33,20 @@ function uncheck () {
     checkbox.checked = false;
 }
 
-function check() {
-    $check = document.getElementById('check');
-    $check.click();
-}
+/*document.addEventListener('invalid', (function(){
+    return function(e){
+        e.preventDefault();
+        e["target"].style.borderWidth = "2px";
+        e["target"].style.marginBottom = "9px";
+        e["target"].style.borderColor = "#f00";
+    };
+})(), true);
+
+document.addEventListener('valid', (function(){
+    return function(e){
+        e.preventDefault();
+        e["target"].style.borderWidth = "1px";
+        e["target"].style.marginBottom = "10px";
+        e["target"].style.borderColor = "#666";
+    };
+})(), true);*/

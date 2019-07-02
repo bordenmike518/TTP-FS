@@ -1,11 +1,13 @@
 <?php
     require_once "config.php";
 
-    if(!isset($_SESSION['id'])) {
-        header("Location: login.php");
-        exit();
-    }
-    else {
+    if(isset($_SESSION['id']) and $ezdb->checkLogin()) {
+
+        $maxtime = 1800; // Reset every 5 min, or logout
+        if (isset($_SESSION['timestamp']) and (time() - $_SESSION['timestamp']) > $maxtime){
+            $ezdb->logout();
+        }
+        $_SESSION['timestamp'] = time();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,8 +15,9 @@
 <title>Portfolio</title>
 <meta charset="utf-8">
 <link rel="icon" href="../images/favicon.ico">
-<link rel="stylesheet" type="text/css" href="../css/portfolio.css">
 <link rel="stylesheet" type="text/css" href="../css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/portfolio.css">
+<script type="text/javascript" src="../javascript/main.js"></script>
 <script type="text/javascript" src="../javascript/portfolio.js"></script>
 </head>
 <body onLoad="listPortfolio();">
@@ -24,6 +27,7 @@
         <div id="dimmer" onclick="popoutMenu();"></div>
         <div id="hamburgerMenu">
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
+            
                 onmouseout="mouseOutLink(this);" onclick="goToLink('portfolio.php');">
                 <div id="childLink">Portfolio</div></div>
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
@@ -31,7 +35,7 @@
                 <div id="childLink">Transactions</div></div>
             <a href="logout.php?logout=true;">
                 <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
-                    onmouseout="mouseOutLink(this);" onclick="goToLink('transactions.php');">
+                    onmouseout="mouseOutLink(this);">
                     <div id="childLink">Sign Out</div>
                 </div> 
             </a>
@@ -49,5 +53,9 @@
 </body>
 </html>
 <?php
+    }
+    else {
+        $ezdb->logout();
+        exit();
     }
 ?>

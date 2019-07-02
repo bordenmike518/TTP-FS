@@ -16,7 +16,6 @@ create table logSheet (
     timstamp timestamp not null
 );
 
-
 drop table if exists transactions;
 create table transactions (
     userId bigserial primary key,

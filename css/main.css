@@ -171,6 +171,10 @@ footer {
     visibility: hidden;
 }
 
+#loginError {
+    border: 5px solid #f00;
+}
+
 @media only all and (max-width: 1024px) {
     
 }
