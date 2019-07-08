@@ -51,7 +51,21 @@
     <br><br>
     <br><br>
     <main>
-        <!-- Dynamic Section -->
+        <?php
+            $result = $ezdb->getTransactions();
+            $total = 0.0;
+            for ($i = 0; $i < count($result); $i++) {
+        ?>
+            <div class='infoBox'>
+                <div id='moreInfoArrow'>&#9660</div>
+                <p id='stockInfo'><?php echo strtoupper($result[$i]['transid']); ?></p>
+                <p id='stockInfo'><?php echo strtoupper($result[$i]['transname']); ?></p>
+                <p id='stockInfo'>$<?php echo $result[$i]['transamount']; ?></p>
+                <p id='stockInfo'><?php echo $result[$i]['transcount']; ?></p>
+                <p id='stockInfo'><?php echo $result[$i]['transtype']; ?></p>
+                <p id='stockInfo'><?php echo $result[$i]['timstamp']; ?></p>
+            </div>"
+        <?php } ?>
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>

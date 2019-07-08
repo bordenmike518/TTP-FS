@@ -8,6 +8,7 @@
         $password  = $_POST['password'];
         $ezdb->register($fname, $lname, $email, $password);
     }
+
     if(isset($_SESSION['id'])) {
         header("Location: portfolio.php");
         exit();
@@ -36,18 +37,19 @@
             <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 200px);">
             <h1>Register</h1>
             <form id="registerForm" autocomplete="on" name="registerForm" action="#" method="POST">
-                <?php if(!isset($_SESSION['loginError'])) { ?>
+                <?php if(!isset($_POST['email']) and !isset($_SESSION['loginError'])) { 
+                ?>
                     <input type="text" name="fname" placeholder="First name" maxlength="64" required>
                     <input type="text" name="lname" placeholder="Last name" maxlength="64" required>
                     <input type="email" name="email" placeholder="Email" maxlength="64" required>
-                <?php } else { ?>
-                    <input type="text" name="fname" placeholder="<?= $_SESSION['lastFname']; ?>" maxlength="64" required>
-                    <input type="text" name="lname" placeholder="<?= $_SESSION['lastFname']; ?>" maxlength="64" required>
+                <?php 
+                } else { ?>
+                    <input type="text" name="fname" value="<?= ucwords($_SESSION['lastFname']); ?>" maxlength="64" required>
+                    <input type="text" name="lname" value="<?= ucwords($_SESSION['lastLname']); ?>" maxlength="64" required>
                     <input type="email" name="email" placeholder="That email is already taken." maxlength="64" required>
                 <?php 
-                    unset($_SESSION['loginError']);
-                    unset($_SESSION['lastFname']);
-                    unset($_SESSION['lastLname']);
+                    session_unset();
+                    session_destroy();
                     }
                 ?>
                 <input type="password" class="showPassword" name="password" placeholder="Password" value="" maxlength="64" required>
@@ -62,7 +64,16 @@
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>
+<script>
+    if(window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
 </html>
 <?php
+    }
+    if (isset($_SESSION['loginError'])) {
+        session_unset();
+        session_destroy();
     }
 ?>

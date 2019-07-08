@@ -18,12 +18,15 @@
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <link rel="stylesheet" type="text/css" href="../css/portfolio.css">
 <script type="text/javascript" src="../javascript/main.js"></script>
-<script type="text/javascript" src="../javascript/portfolio.js"></script>
+<!--script type="text/javascript" src="../javascript/portfolio.js"></script-->
 </head>
 <body onLoad="listPortfolio();">
     <header>
         <div id="headerBox"></div>
-        <div id="navPortfolioLabel">Portfolio $</div><div id="navPortfolioValue"></div>
+        <div id="navPortfolioLabel">Portfolio $</div>
+        <div id="navPortfolioValue"><?php
+
+        ?></div>
         <div id="dimmer" onclick="popoutMenu();"></div>
         <div id="hamburgerMenu">
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
@@ -47,7 +50,17 @@
     <br><br>
     <br><br>
     <main>
-        <!-- Dynamic Section -->
+        <?php
+            $result = $ezdb->getPortfolio();
+            $total = 0.0;
+            for ($i = 0; $i < count($result); $i++) {
+        ?>
+            <div class='infoBox'>
+                <div id='moreInfoArrow'>&#9660</div>
+                <p id='stockInfo'><?php echo strtoupper($result[$i]['transname']); ?></p>
+                <p id='stockInfo'><?php echo strtoupper($result[$i]['transcount']); ?></p>
+            </div>
+        <?php } ?>
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>

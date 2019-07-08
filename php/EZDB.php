@@ -12,11 +12,15 @@
         private $user   = "";
         private $pass   = "";
         private $dbname = "";
-        private $registerQuery1  = "insert into users (fname, lname, email, password, timstamp) values ($1, $2, $3, $4, now());";
-        private $registerQuery2  = "select userid from users where email = $1;";
-        private $loginQuery      = "select userId, password from users where email = $1;";
-        private $logSheetQuery   = "insert into logSheet (userId, type, timstamp) values ($1, $2, now());";
-        private $checkLoginQuery = "select sum(case type when 'I' then 1 when 'O' then -1 end) from logSheet where userId = $1";
+        private $registerQuery = "insert into users (fname, lname, email, password, timstamp) values ($1, $2, $3, $4, now());";
+        private $getUserIdQuery = "select userid from users where email = $1;";
+        private $loginQuery = "select userId, password from users where email = $1;";
+        private $logSheetQuery = "insert into logSheet (userId, type, timstamp) values ($1, $2, now());";
+        private $checkLoginQuery = "select sum(case type when 'I' then 1 when 'O' then -1 end) from logSheet where userId = $1;";
+        private $transactionQuery = "insert into transactions (userId, transName, transAmount, transCount, transType, timstamp) values ($1, $2, $3, $4, $5, now());";
+        private $getTransactionsQuery = "select * from transactions where userId = $1 order by transId;";
+        private $sharesPerTickerQuery = "select transName, sum(case when transType = 'D' then -transCount when transType = 'C' then transCount else 0 end) as transCount from transactions where userId = $1 and transName != '$' group by transName;";
+        //private $getPortfolioValueQuery = "select sum(case when transType = 'D' then transAmount else "
         private $conn;
         
         public function EZDB ($host, $dbname, $user, $pass) {
@@ -27,27 +31,39 @@
         }
 
         public function connect () {
-            $this->conn = pg_connect("host=$this->host port=5432 dbname=$this->dbname user=$this->user password=$this->pass") or die("Failed to connect to database!");
+            $connString = "host=$this->host port=5432 dbname=$this->dbname user=$this->user password=$this->pass";
+            $this->conn = pg_connect($connString);
+            if (!$this->conn) {
+                header("Location: ../html/404.html");
+            }
             $this->pass = "";
             pg_prepare($this->conn, "login", $this->loginQuery);
             pg_prepare($this->conn, "logSheet", $this->logSheetQuery);
-            pg_prepare($this->conn, "register1", $this->registerQuery1);
-            pg_prepare($this->conn, "register2", $this->registerQuery2);
+            pg_prepare($this->conn, "register", $this->registerQuery);
+            pg_prepare($this->conn, "getUserId", $this->getUserIdQuery);
             pg_prepare($this->conn, "checkLogin", $this->checkLoginQuery);
+            pg_prepare($this->conn, "transaction", $this->transactionQuery);
+            pg_prepare($this->conn, "getTransactions", $this->getTransactionsQuery);
+            pg_prepare($this->conn, "sharesPerTicker", $this->sharesPerTickerQuery);
+        }
+
+        private function close () {
+            pg_close($this->conn);
         }
 
         public function register ($fname, $lname, $email, $password) {
             try {
-                unset($_SESSION['loginError']);
-                unset($_SESSION['lastFname']);
-                unset($_SESSION['lastLname']);
+                $fname = strtolower($fname);
+                $lname = strtolower($lname);
+                $email = strtolower($email);
                 $hash  = password_hash($password, PASSWORD_DEFAULT);
-                pg_execute($this->conn, "register1", array("$fname", "$lname", "$email", "$hash"));
-                $result = pg_execute($this->conn, "register2", array("$email"));
+                pg_execute($this->conn, "register", array("$fname", "$lname", "$email", "$hash"));
+                $result = pg_execute($this->conn, "getUserId", array("$email"));
                 $id = pg_fetch_result($result, 0, 0);
+                pg_execute($this->conn, "transaction", array("$id", "$", "5000.00", "1", "D", now()));
+                pg_execute($this->conn, "logSheet", array("$id", "I"));
                 $_SESSION['id'] = $id;
                 $_SESSION['timestamp'] = time();
-                pg_execute($this->conn, "logSheet", array("$id", "I"));
                 $this->close();
                 header("Location: portfolio.php");
             } catch (Exception $e) {
@@ -55,14 +71,12 @@
                 $_SESSION['loginError'] = true;
                 $_SESSION['lastFname'] = $fname;
                 $_SESSION['lastLname'] = $lname;
+                header("Location: register.php");
             }
         }
         
         public function login ($email, $password) {
             try {
-                unset($_SESSION['loginError']);
-                unset($_SESSION['lastEmail']);
-                unset($_SESSION['inuseError']);
                 $result = pg_execute($this->conn, "login", array("$email"));
                 $id = pg_fetch_result($result, 0, 0);
                 $hash = pg_fetch_result($result, 0, 1);
@@ -117,14 +131,27 @@
                 session_unset();
                 session_destroy();
                 header("Location: login.php");
-                exit();
             } catch (Exception $e) {
                 header('Location: ../html/404.html');
             }
         }
 
-        private function close () {
-            pg_close($this->conn);
+        public function getPortfolio() {
+            $id = $_SESSION['id'];
+            $result = pg_execute($this->conn, "sharesPerTicker", array("$id"));
+            $result = pg_fetch_all($result);
+            return $result;
+        }
+
+        public function getTransactions() {
+            $id = $_SESSION['id'];
+            $result = pg_execute($this->conn, "getTransactions", array("$id"));
+            $result = pg_fetch_all($result);
+            return $result;
+        }
+
+        public function makeTransaction($userId, $name, $amount, $count, $type) {
+            pg_execute($this->conn, "transaction", array("$id", "$", "5000.00", "1", "D", now()));
         }
     }
 

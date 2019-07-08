@@ -1,6 +1,9 @@
 <?php
     require_once 'config.php';
 
+    if ( (isset($_SESSION['loginError']) or isset($_SESSION['inuseError']))) {
+    }
+
     if (isset($_POST['email'])) {
         $email    = $_POST['email'];
         $password = $_POST['password'];
@@ -35,19 +38,22 @@
             <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 145px);">
             <h1>Sign In</h1>
             <form id="loginForm" name="loginForm" autocomplete="on" action="#" method="POST">
-                <?php if(isset($_SESSION['loginError'])) { ?>
+                <?php if(!isset($_POST['email']) and isset($_SESSION['loginError'])) { ?>
                     <input type="text" name="email" value="<?= $_SESSION['lastEmail']; ?>" maxlength="64" required>
                     <input type="password" class="showPassword" name="password" placeholder="Email or password incorrect." maxlength="64" required autofocus>
-                <?php } elseif (isset($_SESSION['inuseError'])) { ?>
+                <?php 
+                    session_unset();
+                    session_destroy();
+                } elseif (!isset($_POST['email']) and isset($_SESSION['inuseError'])) { ?>
                     <input type="text" name="email" placeholder="Email already signed in." maxlength="64" required autofocus>
                     <input type="password" class="showPassword" name="password" placeholder="Password" maxlength="64" required>
-                <?php } else { ?>
+                <?php 
+                    session_unset();
+                    session_destroy();
+                } else { ?>
                     <input type="text" name="email" placeholder="Email" maxlength="64" required autofocus>
                     <input type="password" class="showPassword" name="password" placeholder="Password" maxlength="64" required>
-                <?php 
-                    unset($_SESSION['loginError']);
-                    unset($_SESSION['inuseError']);
-                    unset($_SESSION['lastEmail']);
+                <?php
                     }
                 ?>
                 <label for="showId" > <input type="checkbox" id="showId" onclick="showPassword()"> Show password </label>
@@ -64,4 +70,8 @@
 </html>
 <?php
     }
+    /*if (isset($_SESSION['loginError']) or isset($_SESSION['inuseError'])) {
+        session_unset();
+        session_destroy();
+    }*/
 ?>
