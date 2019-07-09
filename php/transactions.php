@@ -1,5 +1,5 @@
 <?php
-    require_once "config.php";
+    include("config.php");
 
     if(!isset($_SESSION['id'])) {
         header("Location: login.php");
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="../javascript/main.js"></script>
 <script type="text/javascript" src="../javascript/transactions.js"></script>
 </head>
-<body onLoad="listTransactions();">
+<body>
     <header>
         <div id="headerBox"></div>
         <div id="navPortfolioLabel">Transactions</div>
@@ -51,20 +51,48 @@
     <br><br>
     <br><br>
     <main>
+        <div id='transLabels'>
+            <div style='width: 23px;'>ID</div>
+            <div style='width: 150px;'>Name</div>
+            <div style='width: 300px;'>Amount</div>
+            <div style='width: 90px;'>Credit/Debit</div>
+            <div style='width: 400px;'>Date</div>
+        </div>
         <?php
             $result = $ezdb->getTransactions();
             $total = 0.0;
             for ($i = 0; $i < count($result); $i++) {
         ?>
-            <div class='infoBox'>
+            <div class='infoBox' style='width: 1060px;'>
                 <div id='moreInfoArrow'>&#9660</div>
-                <p id='stockInfo'><?php echo strtoupper($result[$i]['transid']); ?></p>
-                <p id='stockInfo'><?php echo strtoupper($result[$i]['transname']); ?></p>
-                <p id='stockInfo'>$<?php echo $result[$i]['transamount']; ?></p>
-                <p id='stockInfo'><?php echo $result[$i]['transcount']; ?></p>
-                <p id='stockInfo'><?php echo $result[$i]['transtype']; ?></p>
-                <p id='stockInfo'><?php echo $result[$i]['timstamp']; ?></p>
-            </div>"
+                <p class='stockInfo' style='margin-right: 25px;'><?= strtoupper($result[$i]['transid']); ?></p>
+                <?php
+                    if ($result[$i]['transname'] == '$' and $result[$i]['transtype'] == 'D') {
+                ?>
+                    <p class='stockInfo' style='width: 150px;'>Deposit</p>
+                <?php }
+                    elseif ($result[$i]['transname'] == '$' and $result[$i]['transtype'] == 'C') {
+                ?>
+                    <p class='stockInfo' style='width: 150px;'>Withdraw</p>
+                <?php }
+                    else {
+                ?>
+                    <p class='stockInfo' style='width: 150px;'><?= strtoupper($result[$i]['transname']); ?></p>
+                <?php } 
+                    $amount = number_format(strval(doubleval($result[$i]['transamount'])*doubleval($result[$i]['transcount'])), 2, '.', ',');
+                ?>
+                <?php
+                    if ($result[$i]['transtype'] == 'D') {
+                ?>
+                    <p class='stockInfo' style='width: 300px; text-align: right;'>$<?= $amount ?></p>
+                <?php }
+                    else {
+                ?>
+                    <p class='stockInfo' style='width: 300px; text-align: right;'>($<?= $amount ?>)</p>
+                <?php } ?>
+                <p class='stockInfo' style='width: 90px; text-align: center;'><?= $result[$i]['transtype']; ?></p>
+                <p class='stockInfo' style='width: 400px;'><?= $result[$i]['timstamp']; ?></p>
+            </div>
         <?php } ?>
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>

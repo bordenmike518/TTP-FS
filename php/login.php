@@ -1,5 +1,5 @@
 <?php
-    require_once 'config.php';
+    include('config.php');
 
     if ( (isset($_SESSION['loginError']) or isset($_SESSION['inuseError']))) {
     }
@@ -53,8 +53,10 @@
                 } else { ?>
                     <input type="text" name="email" placeholder="Email" maxlength="64" required autofocus>
                     <input type="password" class="showPassword" name="password" placeholder="Password" maxlength="64" required>
-                <?php
+                <?php 
                     }
+                    session_unset();
+                    session_destroy();
                 ?>
                 <label for="showId" > <input type="checkbox" id="showId" onclick="showPassword()"> Show password </label>
                 <input type="button" value="Login" onclick="document.getElementById('registerSubmit').click();">

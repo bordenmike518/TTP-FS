@@ -1,5 +1,5 @@
 <?php
-    require_once 'config.php';
+    include('config.php');
 
     if (isset($_POST['email'])) {
         $fname     = $_POST['fname'];
@@ -51,6 +51,8 @@
                     session_unset();
                     session_destroy();
                     }
+                    session_unset();
+                    session_destroy();
                 ?>
                 <input type="password" class="showPassword" name="password" placeholder="Password" value="" maxlength="64" required>
                 <input type="password" class="showPassword" name="repassword" placeholder="Confirm password" value="" maxlength="64" required>

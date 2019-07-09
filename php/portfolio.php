@@ -1,5 +1,5 @@
 <?php
-    require_once "config.php";
+    include("config.php");
 
     if(isset($_SESSION['id']) and $ezdb->checkLogin()) {
 
@@ -8,6 +8,7 @@
             $ezdb->logout();
         }
         $_SESSION['timestamp'] = time();
+        $portfolio = $ezdb->getPortfolio();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +21,20 @@
 <script type="text/javascript" src="../javascript/main.js"></script>
 <!--script type="text/javascript" src="../javascript/portfolio.js"></script-->
 </head>
-<body onLoad="listPortfolio();">
+<body>
     <header>
+        <?php
+            $total = 0.0;
+            foreach($portfolio as $symbol => $data) {
+                $count = intval($data['count']);
+                $price = intval($data['lastSalePrice']);
+                $portfolio[$symbol]['value'] = $count * $price;
+                $total += $portfolio[$symbol]['value'];
+            }
+        ?>
         <div id="headerBox"></div>
         <div id="navPortfolioLabel">Portfolio $</div>
-        <div id="navPortfolioValue"><?php
-
-        ?></div>
+        <div id="navPortfolioValue"><?= number_format($total, 2, '.', ',') ?></div>
         <div id="dimmer" onclick="popoutMenu();"></div>
         <div id="hamburgerMenu">
             <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
@@ -51,16 +59,17 @@
     <br><br>
     <main>
         <?php
-            $result = $ezdb->getPortfolio();
-            $total = 0.0;
-            for ($i = 0; $i < count($result); $i++) {
+            $index = 0;
+            foreach($portfolio as $symbol => $data) {
         ?>
             <div class='infoBox'>
                 <div id='moreInfoArrow'>&#9660</div>
-                <p id='stockInfo'><?php echo strtoupper($result[$i]['transname']); ?></p>
-                <p id='stockInfo'><?php echo strtoupper($result[$i]['transcount']); ?></p>
+                <div class='stockInfo' style='width: 150px;'><?= $symbol ?></div>
+                <div class='stockInfo' style='width: 80px; text-align: center;'><?= $data['count'] ?></div>
+                <div class='stockInfo' style='width: 300px; text-align: right;'>$<?= number_format($data['lastSalePrice'], 2, '.', ',') ?></div>
+                <div class='stockInfo' style='width: 300px; text-align: right;'>$<?= number_format($data['value'], 2, '.', ',') ?></div>
             </div>
-        <?php } ?>
+        <?php $index += 1; } ?>
     </main>
     <footer><i>Copyright &copy; 2019 Michael Borden</i></footer>
 </body>

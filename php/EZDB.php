@@ -18,8 +18,8 @@
         private $logSheetQuery = "insert into logSheet (userId, type, timstamp) values ($1, $2, now());";
         private $checkLoginQuery = "select sum(case type when 'I' then 1 when 'O' then -1 end) from logSheet where userId = $1;";
         private $transactionQuery = "insert into transactions (userId, transName, transAmount, transCount, transType, timstamp) values ($1, $2, $3, $4, $5, now());";
-        private $getTransactionsQuery = "select * from transactions where userId = $1 order by transId;";
-        private $sharesPerTickerQuery = "select transName, sum(case when transType = 'D' then -transCount when transType = 'C' then transCount else 0 end) as transCount from transactions where userId = $1 and transName != '$' group by transName;";
+        private $getTransactionsQuery = "select transId, transName, transAmount, transCount, transType, to_char(timstamp, 'Mon DD, YYYY HH:MIPM') timstamp from transactions where userId = $1 order by transId;";
+        private $sharesPerSymbolQuery = "select transName, sum(case when transType = 'D' then -transCount when transType = 'C' then transCount else 0 end) as transCount from transactions where userId = $1 and transName != '$' group by transName;";
         //private $getPortfolioValueQuery = "select sum(case when transType = 'D' then transAmount else "
         private $conn;
         
@@ -44,7 +44,7 @@
             pg_prepare($this->conn, "checkLogin", $this->checkLoginQuery);
             pg_prepare($this->conn, "transaction", $this->transactionQuery);
             pg_prepare($this->conn, "getTransactions", $this->getTransactionsQuery);
-            pg_prepare($this->conn, "sharesPerTicker", $this->sharesPerTickerQuery);
+            pg_prepare($this->conn, "sharesPerSymbol", $this->sharesPerSymbolQuery);
         }
 
         private function close () {
@@ -138,9 +138,28 @@
 
         public function getPortfolio() {
             $id = $_SESSION['id'];
-            $result = pg_execute($this->conn, "sharesPerTicker", array("$id"));
+            $result = pg_execute($this->conn, "sharesPerSymbol", array("$id"));
             $result = pg_fetch_all($result);
-            return $result;
+            $portData = array();
+            for($i = 0; $i < count($result); $i++) {
+                $portData[strtoupper($result[$i]['transname'])] = $result[$i]['transcount'];
+            }
+            $csv = implode(',', array_keys($portData));
+            $url = "https://api.iextrading.com/1.0/tops?symbols=" . $csv;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);            // Read up on parameters!!!
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Read up on parameters!!!
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $json = json_decode($result, true);
+            $portfolio = array();
+            for($i = 0; $i < count($json); $i++) {
+                $symbol = $json[$i]['symbol'];
+                $data = array_slice($json[$i], 1);
+                $data['count'] = $portData[$symbol];
+                $portfolio[$symbol] = $data;
+            }
+            return $portfolio;
         }
 
         public function getTransactions() {

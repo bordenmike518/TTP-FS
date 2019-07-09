@@ -31,13 +31,13 @@ create table transactions (
 
 -- Init params for verification
 insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(2, '$', 5000.00, 1, 'D', now());
+values(3, '$', 5000.00, 1, 'D', now());
 insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(2, 'goog', 1111.25, 2, 'C', now());
+values(3, 'goog', 1111.25, 2, 'C', now());
 insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(2, 'nflx',  375.43, 3, 'C', now());
+values(3, 'nflx',  375.43, 3, 'C', now());
 insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(2,  'ibm',  140.22, 5, 'C', now());
+values(3,  'ibm',  140.22, 5, 'C', now());
 
 -- Sample query to get shares per ticker for the given userId.
 select transName, 
@@ -48,6 +48,8 @@ select transName,
         then transCount
         else 0 end) as transCount
 from transactions
-where userId = 2
+where userId = 3
     and transName != '$'
 group by transName;
+
+to_char(timstamp, 'Mon DD, YYYY HH:MI:SS')

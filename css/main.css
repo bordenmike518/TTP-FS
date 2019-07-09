@@ -66,6 +66,10 @@ footer {
     border-color: #838383;
 }
 
+.hamburgerLink #childLink:hover {
+    border-color: #b26cab;
+}
+
 .infoBox {
     position: relative;
     width: 900px;
@@ -79,6 +83,14 @@ footer {
 
 .infoBox:hover {
     border-color: #b26cab;
+}
+
+.stockInfo {
+    position: relative;
+    display: inline-block;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 11px;
 }
 
 #headerBox {
@@ -148,15 +160,6 @@ footer {
 .infoBox:hover #moreInfoArrow {
     transform: rotate(-45deg);
     color: #b26cab;
-}
-
-#stockInfo {
-    position: relative;
-    float: left;
-    font-size: 48px;
-    font-weight: bold;
-    margin-top: 11px;
-    margin-bottom: 0;
 }
 
 #registerSubmit {
