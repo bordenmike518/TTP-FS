@@ -25,28 +25,22 @@ create table transactions (
     transName varchar(16) not null,
     transAmount float not null,
     transCount int not null,
-    TransType char not null, -- 'C'redit, 'D'ebit
     timstamp timestamp not null
 );
 
 -- Init params for verification
-insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(3, '$', 5000.00, 1, 'D', now());
-insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(3, 'goog', 1111.25, 2, 'C', now());
-insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(3, 'nflx',  375.43, 3, 'C', now());
-insert into transactions (userId, transName, transAmount, transCount, transType, timstamp)
-values(3,  'ibm',  140.22, 5, 'C', now());
+insert into transactions (userId, transName, transAmount, transCount, timstamp)
+    values(3, '$', 5000.00, -1, now());
+insert into transactions (userId, transName, transAmount, transCount, timstamp)
+    values(3, 'goog', 1111.25, 2, now());
+insert into transactions (userId, transName, transAmount, transCount, timstamp)
+    values(3, 'nflx',  375.43, 3, now());
+insert into transactions (userId, transName, transAmount, transCount, timstamp)
+    values(3,  'ibm',  140.22, 5, now());
 
 -- Sample query to get shares per ticker for the given userId.
 select transName, 
-    sum(case 
-        when transType = 'D' 
-        then -transCount
-        when transType = 'C'
-        then transCount
-        else 0 end) as transCount
+    sum(transCount) as transCount
 from transactions
 where userId = 3
     and transName != '$'

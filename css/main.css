@@ -32,6 +32,42 @@ a {
     color: #666;
 }
 
+input[type="text"],
+  input[type="email"], 
+  input[type="password"]{
+    background: transparent;
+    height: 40px;
+    color: #666;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #b26cab;
+    box-shadow: none;
+}
+
+input[type="text"]:hover,
+  input[type="email"]:hover,
+  input[type="password"]:hover {
+    box-shadow: 0px 0px 1px 0px #666;
+}
+
+input[type="submit"],
+  input[type="button"] {
+    height: 40px;
+    background: #b26cab;
+    color: #d3d3d3;
+    font-size: 24px;
+    outline: none;
+    border: none;
+    border-radius: 20px;
+    margin: 5px auto;
+}
+
+input[type="submit"]:hover,
+  input[type="button"]:hover {
+    box-shadow: 0px 2px 2px #666;
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -50,7 +86,7 @@ footer {
 
 .hamburgerLink {
     z-index: 1000;
-    width: 160px;
+    width: 220px;
     padding: 5px;
     margin: 10px;
     cursor: pointer;
@@ -58,40 +94,71 @@ footer {
 
 .hamburgerLink #childLink {
     z-index: 1000;
-    width: 160px;
-    font-size: 20px;
+    width: 220px;
+    font-size: 28px;
     font-weight: bold;
     border-width: 0 2px 2px 0;
     border-style: solid;
     border-color: #838383;
 }
 
-.hamburgerLink #childLink:hover {
+.hamburgerLink:hover #childLink {
     border-color: #b26cab;
 }
 
-.infoBox {
+#infoBox {
     position: relative;
-    width: 900px;
-    height: 64px;
+    clear: left;
+    height: 65px;
     border-width: 0 0 2px 0;
     border-style: solid;
     border-color: #666;
-    margin: 20px auto;
+    margin: 0px auto 20px auto;
     cursor: pointer;
 }
 
-.infoBox:hover {
+#labelBox {
+    position: relative;
+    clear: left;
+    height: 30px;
+    font-size: 28px;
+    text-align: center;
+    border: none;
+    margin: auto;
+}
+
+#infoBox:hover {
     border-color: #b26cab;
 }
 
-.stockInfo {
+#infoBox div {
     position: relative;
     display: inline-block;
-    font-size: 40px;
+    font-size: 48px;
     font-weight: bold;
-    margin-top: 11px;
 }
+
+#labelBox div {
+    position: relative;
+    display: inline-block;
+    font-size: 28px;
+    font-weight: normal;
+}
+
+#infoArrow {
+    position: relative;
+    width: 55px;
+    color: #666;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#infoBox:hover #infoArrow {
+    transform: rotate(-45deg);
+    color: #b26cab;
+}
+
+
 
 #headerBox {
     z-index: 1000;
@@ -146,23 +213,7 @@ footer {
     font-size: 20px;
 }
 
-#moreInfoArrow {
-    position: relative;
-    float: left;
-    width: 65px;
-    height: 50px;
-    font-size: 64px;
-    color: #666;
-    margin-left: -13px;
-    margin-right: 0;
-}
-
-.infoBox:hover #moreInfoArrow {
-    transform: rotate(-45deg);
-    color: #b26cab;
-}
-
-#registerSubmit {
+/*#registerSubmit {
     position: absolute;
     top: 0px;
     left: -5px;
@@ -171,7 +222,7 @@ footer {
     padding: 0px;
     margin: 0px;
     visibility: hidden;
-}
+}*/
 
 #loginError {
     border: 5px solid #f00;

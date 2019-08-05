@@ -2,13 +2,34 @@
     include("config.php");
 
     if(isset($_SESSION['id']) and $ezdb->checkLogin()) {
-
-        $maxtime = 1800; // Reset every 5 min, or logout
+        /*$maxtime = 1800; // Reset every 5 min, or logout
         if (isset($_SESSION['timestamp']) and (time() - $_SESSION['timestamp']) > $maxtime){
             $ezdb->logout();
         }
-        $_SESSION['timestamp'] = time();
+        $_SESSION['timestamp'] = time();*/
+        if (isset($_POST['stockForm'])) {
+            if ($_POST['stockForm'] == 'Buy') {
+                $ezdb->makeTransaction($_SESSION['id'], $_SESSION['ticker'], $_SESSION['price'], -intval($_SESSION['count']));
+            }
+            else {
+                $ezdb->makeTransaction($_SESSION['id'], $_SESSION['ticker'], $_SESSION['price'], intval($_SESSION['count']));
+            }
+        }
         $portfolio = $ezdb->getPortfolio();
+        $funds = $ezdb->getFunds();
+        $total = 0.0;
+        foreach($portfolio as $symbol => $data) {
+            $count = $data['count'];
+            $price = $data['price'];
+            $portfolio[$symbol]['value'] = $count * $price;
+            $total += $portfolio[$symbol]['value'];
+        }
+        if(isset($_SESSION['liveTicker']) and strlen(trim($_SESSION['liveTicker'])) > 0) {
+            $price = $_SESSION['liveTickerValue'];
+            unset($_SESSION['liveTickerValue']);
+        } else {
+            $price = 0.0;
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,50 +45,54 @@
 <body>
     <header>
         <?php
-            $total = 0.0;
-            foreach($portfolio as $symbol => $data) {
-                $count = intval($data['count']);
-                $price = intval($data['lastSalePrice']);
-                $portfolio[$symbol]['value'] = $count * $price;
-                $total += $portfolio[$symbol]['value'];
-            }
         ?>
         <div id="headerBox"></div>
         <div id="navPortfolioLabel">Portfolio $</div>
         <div id="navPortfolioValue"><?= number_format($total, 2, '.', ',') ?></div>
         <div id="dimmer" onclick="popoutMenu();"></div>
         <div id="hamburgerMenu">
-            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
-            
-                onmouseout="mouseOutLink(this);" onclick="goToLink('portfolio.php');">
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('portfolio.php');">
                 <div id="childLink">Portfolio</div></div>
-            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
-                onmouseout="mouseOutLink(this);" onclick="goToLink('transactions.php');">
+            <div class="hamburgerLink" onmouseover="mouseOverLink(this);" onmouseout="mouseOutLink(this);" onclick="goToLink('transactions.php');">
                 <div id="childLink">Transactions</div></div>
             <a href="logout.php?logout=true;">
-                <div class="hamburgerLink" onmouseover="mouseOverLink(this);" 
-                    onmouseout="mouseOutLink(this);">
-                    <div id="childLink">Sign Out</div>
+                <div class='hamburgerLink' onmouseover='mouseOverLink(this);' onmouseout='mouseOutLink(this);'>
+                    <div id='childLink'>Sign Out</div>
                 </div> 
             </a>
             <canvas id="canvas"></canvas>
         </div>
-        <input type="image" src="../images/hamburger_button.png" id="hamburger_button" onclick="popoutMenu();">
+        <input type='image' src='../images/hamburger_button.png' id='hamburger_button' onclick='popoutMenu();'>
     </header>
     <nav></nav>
     <br><br>
     <br><br>
     <main>
+        <form name='liveTicker' action='' method='POST'></form>
+        <form id='stockForm' name='stockForm' method='POST'>
+            <div class='sfLabel'>Funds </div><div>: $</div><div style='width: 200px; text-align: right;'><?= number_format(-$funds, 2, '.', ',') ?></div><br>
+            <div class='sfLabel'>Ticker</div><div>:</div><input type='button' id='reload' name='reload' required>
+            <input type='text' id='liveTicker' name='ticker' style='width: 185px;' minlength='1' maxlength='16' autocomplete='off' form='liveTicker' required><br>
+            <div class='sfLabel'>Price </div><div>: $</div><div name='price' style='width: 200px; text-align: right;'><?= number_format($price, 2, '.', ',') ?></div><br>
+            <div class='sfLabel'>Count </div><div>:</div><input type='text' name='count' min='1' max='65536' autocomplete='off' required><br>
+            <input type='submit' id='buy' name='buy' value='Buy'><input type='submit' id='sell' name='sell' value='Sell'><br>
+        </form>
+        <div id='labelBox' style='width: 945px; padding-left: 55px;'>
+            <div style='width: 160px;'>Name</div>
+            <div style='width: 250px;'>Count</div>
+            <div style='width: 210px;'>Price</div>
+            <div style='width: 300px;'>Value</div>
+        </div>
         <?php
             $index = 0;
             foreach($portfolio as $symbol => $data) {
         ?>
-            <div class='infoBox'>
-                <div id='moreInfoArrow'>&#9660</div>
-                <div class='stockInfo' style='width: 150px;'><?= $symbol ?></div>
-                <div class='stockInfo' style='width: 80px; text-align: center;'><?= $data['count'] ?></div>
-                <div class='stockInfo' style='width: 300px; text-align: right;'>$<?= number_format($data['lastSalePrice'], 2, '.', ',') ?></div>
-                <div class='stockInfo' style='width: 300px; text-align: right;'>$<?= number_format($data['value'], 2, '.', ',') ?></div>
+            <div id='infoBox' style='width: 1000px;'>
+                <div id='infoArrow'>&#9660</div>
+                <div style='width: 160px;'><?= $symbol ?></div>
+                <div style='width: 250px; text-align: center;'><?= $data['count'] ?></div>
+                <div style='width: 210px; text-align: right;'>$<?= number_format($data['price'], 2, '.', ',') ?></div>
+                <div style='width: 300px; text-align: right;'>$<?= number_format($data['value'], 2, '.', ',') ?></div>
             </div>
         <?php $index += 1; } ?>
     </main>

@@ -5,14 +5,11 @@
         header("Location: login.php");
         exit();
     } else {
-        $maxtime = 1800; // Reset every 5 min, or logout
-
+        /*$maxtime = 1800; // Reset every 5 min, or logout
         if (isset($_SESSION['timestamp']) and (time() - $_SESSION['timestamp']) > $maxtime){
             $ezdb->logout();
-            session_unset();
-            session_destroy();
         }
-        $_SESSION['timestamp'] = time();
+        $_SESSION['timestamp'] = time();*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,47 +48,44 @@
     <br><br>
     <br><br>
     <main>
-        <div id='transLabels'>
-            <div style='width: 23px;'>ID</div>
-            <div style='width: 150px;'>Name</div>
-            <div style='width: 300px;'>Amount</div>
-            <div style='width: 90px;'>Credit/Debit</div>
-            <div style='width: 400px;'>Date</div>
+        <div id='labelBox' style='width: 1145px; padding-left: 55px;'>
+            <div style='width: 170px;'>Name</div>
+            <div style='width: 450px;'>Amount</div>
+            <div style='width: 500px;'>Date</div>
         </div>
         <?php
             $result = $ezdb->getTransactions();
             $total = 0.0;
             for ($i = 0; $i < count($result); $i++) {
         ?>
-            <div class='infoBox' style='width: 1060px;'>
-                <div id='moreInfoArrow'>&#9660</div>
-                <p class='stockInfo' style='margin-right: 25px;'><?= strtoupper($result[$i]['transid']); ?></p>
+            <div id='infoBox' style='width: 1200px;'>
+                <div id='infoArrow'>&#9660</div>
                 <?php
-                    if ($result[$i]['transname'] == '$' and $result[$i]['transtype'] == 'D') {
+                    if ($result[$i]['transname'] == '$' and $result[$i]['transcount'] < 0) {
                 ?>
-                    <p class='stockInfo' style='width: 150px;'>Deposit</p>
+                    <div style='width: 170px;'>Deposit</div>
                 <?php }
-                    elseif ($result[$i]['transname'] == '$' and $result[$i]['transtype'] == 'C') {
+                    elseif ($result[$i]['transname'] == '$' and $result[$i]['transcount'] > 0) {
                 ?>
-                    <p class='stockInfo' style='width: 150px;'>Withdraw</p>
+                    <div style='width: 170px;'>Withdraw</div>
                 <?php }
                     else {
                 ?>
-                    <p class='stockInfo' style='width: 150px;'><?= strtoupper($result[$i]['transname']); ?></p>
+                    <div style='width: 170px;'><?= strtoupper($result[$i]['transname']); ?></div>
                 <?php } 
-                    $amount = number_format(strval(doubleval($result[$i]['transamount'])*doubleval($result[$i]['transcount'])), 2, '.', ',');
                 ?>
                 <?php
-                    if ($result[$i]['transtype'] == 'D') {
+                    if ($result[$i]['transcount'] < 0) {
+                    $amount = number_format($result[$i]['transamount'] * -$result[$i]['transcount'], 2, '.', ',');
                 ?>
-                    <p class='stockInfo' style='width: 300px; text-align: right;'>$<?= $amount ?></p>
+                    <div style='width: 450px; text-align: right;'>$<?= $amount ?></div>
                 <?php }
                     else {
+                    $amount = number_format($result[$i]['transamount'] * $result[$i]['transcount'], 2, '.', ',');
                 ?>
-                    <p class='stockInfo' style='width: 300px; text-align: right;'>($<?= $amount ?>)</p>
+                    <div style='width: 450px; text-align: right;'>($<?= $amount ?>)</div>
                 <?php } ?>
-                <p class='stockInfo' style='width: 90px; text-align: center;'><?= $result[$i]['transtype']; ?></p>
-                <p class='stockInfo' style='width: 400px;'><?= $result[$i]['timstamp']; ?></p>
+                <div style='width: 500px; text-align: right;'><?= $result[$i]['timstamp']; ?></div>
             </div>
         <?php } ?>
     </main>

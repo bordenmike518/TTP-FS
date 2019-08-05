@@ -30,7 +30,12 @@
     <header></header>
     <nav></nav>
     <main>
-        <?php if(isset($_SESSION['loginError']) or isset($_SESSION['inuseError'])) { ?>
+        <?php 
+            if(isset($_SESSION['clear'])) {
+                session_unset();
+                session_destroy();
+            } 
+            if(isset($_SESSION['loginError']) or isset($_SESSION['inuseError'])) { ?>
             <div class="loginbox" id="loginError" style="height: 280px;">
         <?php } else { ?>
             <div class="loginbox" style="height: 280px;">
@@ -38,28 +43,23 @@
             <img src="../images/avatar.png" class="avatar" style="top: calc(-50% + 145px);">
             <h1>Sign In</h1>
             <form id="loginForm" name="loginForm" autocomplete="on" action="#" method="POST">
-                <?php if(!isset($_POST['email']) and isset($_SESSION['loginError'])) { ?>
+                <?php
+                    if(!isset($_POST['email']) and isset($_SESSION['loginError'])) { ?>
                     <input type="text" name="email" value="<?= $_SESSION['lastEmail']; ?>" maxlength="64" required>
                     <input type="password" class="showPassword" name="password" placeholder="Email or password incorrect." maxlength="64" required autofocus>
                 <?php 
-                    session_unset();
-                    session_destroy();
+                    $_SESSION['clear'] = true;
                 } elseif (!isset($_POST['email']) and isset($_SESSION['inuseError'])) { ?>
                     <input type="text" name="email" placeholder="Email already signed in." maxlength="64" required autofocus>
                     <input type="password" class="showPassword" name="password" placeholder="Password" maxlength="64" required>
                 <?php 
-                    session_unset();
-                    session_destroy();
+                    $_SESSION['clear'] = true;
                 } else { ?>
                     <input type="text" name="email" placeholder="Email" maxlength="64" required autofocus>
                     <input type="password" class="showPassword" name="password" placeholder="Password" maxlength="64" required>
-                <?php 
-                    }
-                    session_unset();
-                    session_destroy();
-                ?>
-                <label for="showId" > <input type="checkbox" id="showId" onclick="showPassword()"> Show password </label>
-                <input type="button" value="Login" onclick="document.getElementById('registerSubmit').click();">
+                <?php } ?>
+                <label for="showPass" > <input type="checkbox" id="showPass" onclick="showPassword();"> Show password </label><br>
+                <!--input type="button" value="Login" onclick="document.getElementById('registerSubmit').click();"-->
                 <input type="submit" id="registerSubmit">
                 <br><br>
                 <a href="register.php">Don't have an account?</a><br><br>

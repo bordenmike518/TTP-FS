@@ -6,16 +6,8 @@ String.prototype.format = function () {
         });
 };
 
-function listPortfolio() {
-    var stocks = ["AAPL", "STWD", "NFLX", "MSFT", "ATT", "GOOG", "FB", "JPM", "MMM", "CAT", "DOW", "IBM", "INTC", "CSCO", "BA", "AXP", "JNJ"];
-    var main = document.getElementsByTagName("main")[0];
-    console.log(main);
-    var stockBox = " \
-        <div class='infoBox'> \
-            <div id='moreInfoArrow'>&#9660</div> \
-            <p id='stockInfo'>{1}</p> \
-        </div>";
-    for (var i = 0; i < stocks.length; i++) {
-        main.insertAdjacentHTML("afterbegin", stockBox.format((120 * (i+1)), stocks[i]));
-    }
+function getLiveTicker(evt) {
+    document.getElementById('liveTicker').submit();
 }
+
+document.getElementById("liveTicker").addEventListener("keyup", getLiveTicker, false);

@@ -29,7 +29,7 @@ function validateConfirmedPassword() {
 }
 
 function uncheck () {
-    var checkbox = document.getElementById('showId');
+    var checkbox = document.getElementById('showPass');
     checkbox.checked = false;
 }
 

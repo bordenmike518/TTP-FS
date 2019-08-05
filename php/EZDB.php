@@ -17,10 +17,10 @@
         private $loginQuery = "select userId, password from users where email = $1;";
         private $logSheetQuery = "insert into logSheet (userId, type, timstamp) values ($1, $2, now());";
         private $checkLoginQuery = "select sum(case type when 'I' then 1 when 'O' then -1 end) from logSheet where userId = $1;";
-        private $transactionQuery = "insert into transactions (userId, transName, transAmount, transCount, transType, timstamp) values ($1, $2, $3, $4, $5, now());";
-        private $getTransactionsQuery = "select transId, transName, transAmount, transCount, transType, to_char(timstamp, 'Mon DD, YYYY HH:MIPM') timstamp from transactions where userId = $1 order by transId;";
-        private $sharesPerSymbolQuery = "select transName, sum(case when transType = 'D' then -transCount when transType = 'C' then transCount else 0 end) as transCount from transactions where userId = $1 and transName != '$' group by transName;";
-        //private $getPortfolioValueQuery = "select sum(case when transType = 'D' then transAmount else "
+        private $makeTransactionQuery = "insert into transactions (userId, transName, transAmount, transCount, timstamp) values ($1, $2, $3, $4, now());";
+        private $getTransactionsQuery = "select transId, transName, transAmount, transCount, to_char(timstamp, 'MM/DD/YYYY HH:MIPM') timstamp from transactions where userId = $1 order by transId;";
+        private $sharesPerSymbolQuery = "select transName, sum(transCount) as transCount from transactions where userId = $1 and transCount > 0 group by transName;";
+        private $getFundsQuery = "select sum(transCount*transAmount) from transactions where userId = $1;";
         private $conn;
         
         public function EZDB ($host, $dbname, $user, $pass) {
@@ -42,9 +42,10 @@
             pg_prepare($this->conn, "register", $this->registerQuery);
             pg_prepare($this->conn, "getUserId", $this->getUserIdQuery);
             pg_prepare($this->conn, "checkLogin", $this->checkLoginQuery);
-            pg_prepare($this->conn, "transaction", $this->transactionQuery);
+            pg_prepare($this->conn, "makeTransaction", $this->makeTransactionQuery);
             pg_prepare($this->conn, "getTransactions", $this->getTransactionsQuery);
             pg_prepare($this->conn, "sharesPerSymbol", $this->sharesPerSymbolQuery);
+            pg_prepare($this->conn, "getFunds", $this->getFundsQuery);
         }
 
         private function close () {
@@ -53,6 +54,9 @@
 
         public function register ($fname, $lname, $email, $password) {
             try {
+                if(isset($_SESSION['clear'])) {
+                    unset($_SESSION['clear']);
+                }
                 $fname = strtolower($fname);
                 $lname = strtolower($lname);
                 $email = strtolower($email);
@@ -60,7 +64,7 @@
                 pg_execute($this->conn, "register", array("$fname", "$lname", "$email", "$hash"));
                 $result = pg_execute($this->conn, "getUserId", array("$email"));
                 $id = pg_fetch_result($result, 0, 0);
-                pg_execute($this->conn, "transaction", array("$id", "$", "5000.00", "1", "D", now()));
+                pg_execute($this->conn, "makeTransaction", array("$id", "$", "5000.00", "1", "D", now()));
                 pg_execute($this->conn, "logSheet", array("$id", "I"));
                 $_SESSION['id'] = $id;
                 $_SESSION['timestamp'] = time();
@@ -77,6 +81,9 @@
         
         public function login ($email, $password) {
             try {
+                if(isset($_SESSION['clear'])) {
+                    unset($_SESSION['clear']);
+                }
                 $result = pg_execute($this->conn, "login", array("$email"));
                 $id = pg_fetch_result($result, 0, 0);
                 $hash = pg_fetch_result($result, 0, 1);
@@ -142,10 +149,10 @@
             $result = pg_fetch_all($result);
             $portData = array();
             for($i = 0; $i < count($result); $i++) {
-                $portData[strtoupper($result[$i]['transname'])] = $result[$i]['transcount'];
+                $portData[strtoupper($result[$i]['transname'])] = intval($result[$i]['transcount']);
             }
             $csv = implode(',', array_keys($portData));
-            $url = "https://api.iextrading.com/1.0/tops?symbols=" . $csv;
+            $url = "https://api.iextrading.com/1.0/tops/last?symbols=" . $csv;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);            // Read up on parameters!!!
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Read up on parameters!!!
@@ -162,6 +169,13 @@
             return $portfolio;
         }
 
+        public function getFunds() {
+            $id = $_SESSION['id'];
+            $result = pg_execute($this->conn, "getFunds", array("$id"));
+            $result = pg_fetch_result($result, 0, 0);
+            return $result;
+        }
+
         public function getTransactions() {
             $id = $_SESSION['id'];
             $result = pg_execute($this->conn, "getTransactions", array("$id"));
@@ -170,7 +184,7 @@
         }
 
         public function makeTransaction($userId, $name, $amount, $count, $type) {
-            pg_execute($this->conn, "transaction", array("$id", "$", "5000.00", "1", "D", now()));
+            pg_execute($this->conn, "makeTransaction", array("$id", "$", "5000.00", "1", "D", now()));
         }
     }
 

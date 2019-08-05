@@ -29,7 +29,12 @@
     <header></header>
     <nav></nav>
     <main>
-        <?php if(!isset($_SESSION['loginError'])) { ?>
+        <?php 
+            if(isset($_SESSION['clear'])) {
+                session_unset();
+                session_destroy();
+            } 
+            if(!isset($_SESSION['loginError'])) { ?>
             <div class="loginbox" style="height: 400px;">
         <?php } else { ?>
             <div class="loginbox" id="loginError" style="height: 400px;">
@@ -43,21 +48,16 @@
                     <input type="text" name="lname" placeholder="Last name" maxlength="64" required>
                     <input type="email" name="email" placeholder="Email" maxlength="64" required>
                 <?php 
+                    $_SESSION['clear'] = true;
                 } else { ?>
                     <input type="text" name="fname" value="<?= ucwords($_SESSION['lastFname']); ?>" maxlength="64" required>
                     <input type="text" name="lname" value="<?= ucwords($_SESSION['lastLname']); ?>" maxlength="64" required>
                     <input type="email" name="email" placeholder="That email is already taken." maxlength="64" required>
-                <?php 
-                    session_unset();
-                    session_destroy();
-                    }
-                    session_unset();
-                    session_destroy();
-                ?>
+                <?php } ?>
                 <input type="password" class="showPassword" name="password" placeholder="Password" value="" maxlength="64" required>
                 <input type="password" class="showPassword" name="repassword" placeholder="Confirm password" value="" maxlength="64" required>
-                <label for="showId" > <input type="checkbox" id="showId" onclick="showPassword()"> Show password </label>
-                <input type="button" value="Login" onclick="validateConfirmedPassword();">
+                <label for="showPass" > <input type="checkbox" id="showPass" onclick="showPassword()"> Show password </label><br>
+                <!--input type="button" value="Login" onclick="validateConfirmedPassword();"-->
                 <input type="submit" id="registerSubmit">
                 <br><br>
                 <a href="login.php">Already have an account?</a><br><br>
