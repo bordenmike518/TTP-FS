@@ -1,5 +1,6 @@
 <?php
-    if(!isset($_SESSION)) { 
+    if(!isset($_SESSION)) {
+        ini_set("session.gc_maxlifetime","3600");   // 1 hour
         session_start(); 
     } 
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {

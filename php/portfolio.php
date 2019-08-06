@@ -40,7 +40,7 @@
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <link rel="stylesheet" type="text/css" href="../css/portfolio.css">
 <script type="text/javascript" src="../javascript/main.js"></script>
-<!--script type="text/javascript" src="../javascript/portfolio.js"></script-->
+<script type="text/javascript" src="../javascript/portfolio.js"></script>
 </head>
 <body>
     <header>
@@ -70,10 +70,12 @@
     <main>
         <form name='liveTicker' action='' method='POST'></form>
         <form id='stockForm' name='stockForm' method='POST'>
-            <div class='sfLabel'>Funds </div><div>: $</div><div style='width: 200px; text-align: right;'><?= number_format(-$funds, 2, '.', ',') ?></div><br>
-            <div class='sfLabel'>Ticker</div><div>:</div><input type='button' id='reload' name='reload' required>
-            <input type='text' id='liveTicker' name='ticker' style='width: 185px;' minlength='1' maxlength='16' autocomplete='off' form='liveTicker' required><br>
-            <div class='sfLabel'>Price </div><div>: $</div><div name='price' style='width: 200px; text-align: right;'><?= number_format($price, 2, '.', ',') ?></div><br>
+            <div class='sfLabel'>Funds </div><div>: $</div><div style='width: 200px; text-align: right;'><?= number_format(-$funds, 2, '.', ',') ?></div>
+            <div class='sfLabel'>Ticker</div><div>:</div><div id='liveContainer'>
+            <div id='liveTicker' name='liveTicker' style='margin: 20px;'></div>
+            <input type='text' id='liveInput' name='liveInput' style='width: 100%; height: 40px; text-align: left;' minlength='1' maxlength='16' autocomplete='off' spellcheck='false' onkeydown='clearText()' onkeyup='getTickerData();' required></div><br>
+            <div id='liveName' name='liveName' style=''></div>
+            <div class='sfLabel'>Price </div><div>: $</div><div id='livePrice' name='price' style='width: 200px; text-align: right;'><?= number_format($price, 2, '.', ',') ?></div><br>
             <div class='sfLabel'>Count </div><div>:</div><input type='text' name='count' min='1' max='65536' autocomplete='off' required><br>
             <input type='submit' id='buy' name='buy' value='Buy'><input type='submit' id='sell' name='sell' value='Sell'><br>
         </form>
