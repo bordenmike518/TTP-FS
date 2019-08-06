@@ -9,10 +9,10 @@
         $_SESSION['timestamp'] = time();*/
         if (isset($_POST['stockForm'])) {
             if ($_POST['stockForm'] == 'Buy') {
-                $ezdb->makeTransaction($_SESSION['id'], $_SESSION['ticker'], $_SESSION['price'], -intval($_SESSION['count']));
+                $ezdb->makeTransaction($_POST['id'], $_POST['hiddenTicker'], $_POST['price'], -intval($_POST['count']));
             }
             else {
-                $ezdb->makeTransaction($_SESSION['id'], $_SESSION['ticker'], $_SESSION['price'], intval($_SESSION['count']));
+                $ezdb->makeTransaction($_POST['id'], $_POST['tihiddenTickercker'], $_POST['price'], intval($_POST['count']));
             }
         }
         $portfolio = $ezdb->getPortfolio();
@@ -69,15 +69,17 @@
     <br><br>
     <main>
         <form name='liveTicker' action='' method='POST'></form>
-        <form id='stockForm' name='stockForm' method='POST'>
-            <div class='sfLabel'>Funds </div><div>: $</div><div style='width: 200px; text-align: right;'><?= number_format(-$funds, 2, '.', ',') ?></div>
-            <div class='sfLabel'>Ticker</div><div>:</div><div id='liveContainer'>
-            <div id='liveTicker' name='liveTicker' style='margin: 20px;'></div>
-            <input type='text' id='liveInput' name='liveInput' style='width: 100%; height: 40px; text-align: left;' minlength='1' maxlength='16' autocomplete='off' spellcheck='false' onkeydown='clearText()' onkeyup='getTickerData();' required></div><br>
+        <form id='stockForm' name='stockForm' method='POST' onsubmit='return stockValidate();'>
+            <div class='sfLabel'>Funds </div><div>: $</div><input type='text' id='funds' style='width: 200px; text-align: right; border: none;' value='<?= number_format(-$funds, 2, '.', ',') ?>' disabled="disabled"></div>
+            <div class='sfLabel'>Ticker</div><div>:</div>
+            <div id='liveContainer' style='margin: 0px;'>
+                <div id='liveTicker' name='ticker' style='margin: 20px;' ></div>
+                <input type='hidden' id='hiddenLiveTicker' name='hiddenTicker'>
+                <input type='text' id='liveInput' name='liveInput' style='width: 100%; height: 40px; text-align: left;' minlength='1' maxlength='16' autocomplete='off' spellcheck='false' onkeydown='clearText()' onkeyup='getTickerData();' required></div><br>
             <div id='liveName' name='liveName' style=''></div>
-            <div class='sfLabel'>Price </div><div>: $</div><div id='livePrice' name='price' style='width: 200px; text-align: right;'><?= number_format($price, 2, '.', ',') ?></div><br>
-            <div class='sfLabel'>Count </div><div>:</div><input type='text' name='count' min='1' max='65536' autocomplete='off' required><br>
-            <input type='submit' id='buy' name='buy' value='Buy'><input type='submit' id='sell' name='sell' value='Sell'><br>
+            <div class='sfLabel'>Price </div><div>: $</div><input type='text' id='livePrice' style='width: 200px; text-align: right;' value='<?= number_format($price, 2, '.', ',') ?>' disabled='disabled'></div><br>
+            <div class='sfLabel'>Count </div><div>:</div><input type='text' id='count' name='count' min='1' max='65536' autocomplete='off' required><br>
+            <input type='submit' id='buy' name='buy' value='Buy' onclick='buySell = "buy"'><input type='submit' id='sell' name='sell' value='Sell' onclick='buySell = "sell"'><br>
         </form>
         <div id='labelBox' style='width: 945px; padding-left: 55px;'>
             <div style='width: 160px;'>Name</div>
@@ -89,6 +91,9 @@
             $index = 0;
             foreach($portfolio as $symbol => $data) {
         ?>
+            <script>
+                stockDict['<?= $symbol ?>'] = <?= $data['count'] ?>;
+            </script>
             <div id='infoBox' style='width: 1000px;'>
                 <div id='infoArrow'>&#9660</div>
                 <div style='width: 160px;'><?= $symbol ?></div>

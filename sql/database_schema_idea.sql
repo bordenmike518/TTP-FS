@@ -30,13 +30,13 @@ create table transactions (
 
 -- Init params for verification
 insert into transactions (userId, transName, transAmount, transCount, timstamp)
-    values(3, '$', 5000.00, -1, now());
+    values(2, '$', 5000.00, -1, now());
 insert into transactions (userId, transName, transAmount, transCount, timstamp)
-    values(3, 'goog', 1111.25, 2, now());
+    values(2, 'goog', 1111.25, 2, now());
 insert into transactions (userId, transName, transAmount, transCount, timstamp)
-    values(3, 'nflx',  375.43, 3, now());
+    values(2, 'nflx',  375.43, 3, now());
 insert into transactions (userId, transName, transAmount, transCount, timstamp)
-    values(3,  'ibm',  140.22, 5, now());
+    values(2,  'ibm',  140.22, 5, now());
 
 -- Sample query to get shares per ticker for the given userId.
 select transName, 

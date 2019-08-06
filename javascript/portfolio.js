@@ -20,10 +20,12 @@ function clearText() {
 function getTickerData () {
     var input = document.getElementById('liveInput').value.trim();
     var ticker = document.getElementById('liveTicker');
+    var hiddenTicker = document.getElementById('hiddenLiveTicker');
     var price = document.getElementById('livePrice');
     if (input.length == 0) { 
         ticker.innerText = '';
-        price.innerText = '0.00'; 
+        hiddenTicker.value = '';
+        price.value = '0.00'; 
         return;
     }
     input = input.toUpperCase();
@@ -61,7 +63,8 @@ function getTickerData () {
                     }
                 }
                 ticker.innerText = tic;
-                price.innerText  = prc;
+                hiddenTicker.value = tic;
+                price.value  = prc;
             }
         }
     })(request);
@@ -81,7 +84,7 @@ function updateName() {
                 for (i = 0; i < data.length; i++) {
                     if (data[i].symbol == ticker && ticker.length != 0) {
                         if (name.innerText != data[i].name) {
-                            console.log(name.innerText)
+                            console.log(name.value)
                             console.log(cmp)
                             name.innerText = data[i].name;
                         }
@@ -93,4 +96,26 @@ function updateName() {
             }
         }
     })(request);
+}
+
+var buySell;
+var stockDict = {};
+function stockValidate() {
+    var funds = document.forms['stockForm']['funds'];
+    console.log(funds);
+    var ticker = document.forms['stockForm']['hiddenLiveTicker'];
+    console.log(ticker);
+    var price = document.forms['stockForm']['price'];
+    console.log(price);
+    var count = document.forms['stockForm']['count'];
+    console.log(count);
+    console.log(stockDict);
+    if (price > 0 && ticker == '' && 
+       (buySell == 'buy' && funds < price*count) &&
+        stockDict[ticker] > count) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
